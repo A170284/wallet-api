@@ -7,5 +7,4 @@ router.get("/:userId",getTransactionsByUserId);
 router.post("/",createTransaction);
 router.delete("/:id",deleteTransaction);
 router.get("/summary/:userId",getSummaryByUserId)
-
 export default router;

@@ -15,26 +15,25 @@ export async function getTransactionsByUserId(req,res) {
     }
 }
 
-export async function createTransaction(req,res) {
+export async function createTransaction(req, res) {
     try {
-        const{title,amount,category,user_id} = req.body;
-        if(!title || !user_id || !category||amount === undefined){
-             return res.status(400).json({message:"All fields are required"});
+        const { title, amount, category, user_id } = req.body;
+        
+        if (!title || !user_id || !category || amount === undefined) {
+            return res.status(400).json({ message: "All fields are required" });
         }
 
-        const transaction = await sql`
-            INSERT INTO transactions(user_id,title,amount,category)
-            VALUES(${user_id},${title},${amount},${category})
+        const [transaction] = await sql`
+            INSERT INTO transactions (user_id, title, amount, category)
+            VALUES (${user_id}, ${title}, ${amount}, ${category})
             RETURNING *
         `;
 
-        console.log(transaction);
-        res.status(201).json(transaction[0]);
-
+        res.status(201).json(transaction);
     } catch (error) {
-        console.log("Error creating the transaction",error)
-        res.status(500).json({message:"Internalserver error"})   
-        }
+        console.error("Error creating transaction:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
 }
 
 export async function deleteTransaction(req,res){
@@ -89,3 +88,4 @@ export async function getSummaryByUserId(req,res) {
     }
     
 }
+
